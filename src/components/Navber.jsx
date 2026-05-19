@@ -56,7 +56,6 @@ export function Navbar() {
 
                         })}
                     </div>
-
                     {/* Buttons for Desktop */}
                     <div className="hidden md:flex items-center space-x-4">
                         <Link href="/login">
@@ -64,7 +63,6 @@ export function Navbar() {
                                 Login
                             </button>
                         </Link>
-
                         <Link href="/signup">
                             <button className={`rounded-xl ${pathname === "/signup" ? "bg-[#2c93a6] text-white" : "bg-white"}  px-6 py-2.5 text-sm font-medium  transition-all hover:bg-[#237888] hover:text-white shadow-sm`}>
                                 Sign Up
