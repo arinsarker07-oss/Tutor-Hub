@@ -13,9 +13,9 @@ const Footer = () => {
           
           {/* Column 1: Logo & Tagline */}
           <div className="flex flex-col space-y-4">
-            <span className="text-2xl bg-gradient-to-r from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent font-black tracking-tight ">
+            <p className=" text-3xl bg-gradient-to-r from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent font-black tracking-tight ">
               TutorHub
-            </span>
+            </p>
             <p className="text-sm text-slate-500 leading-relaxed max-w-xs">
               Connecting knowledge, together. Find the perfect tutor or grow your teaching career.
             </p>
@@ -23,7 +23,7 @@ const Footer = () => {
 
           {/* Column 2: Contact Information */}
           <div>
-            <h4 className="text-xs tracking-wider uppercase text-[#115e59] font-bold mb-4">
+            <h4 className=" text-[#115e59] font-bold mb-4">
               Contact Info
             </h4>
             <ul className="space-y-3 text-sm text-slate-600">
@@ -44,7 +44,7 @@ const Footer = () => {
 
           {/* Column 3: Tutor Services (Learning Services) */}
           <div>
-            <h4 className="text-xs font-bold tracking-wider uppercase text-[#115e59] mb-4">
+            <h4 className=" font-bold  text-[#115e59] mb-4">
               Tutor Services
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-600">
@@ -58,7 +58,7 @@ const Footer = () => {
 
           {/* Column 4: Social Links & Company */}
           <div>
-            <h4 className="text-xs font-bold tracking-wider uppercase text-[#115e59] mb-4">
+            <h4 className="text-xs font-extrabold tracking-wider uppercase text-[#115e59] mb-4">
               Social Links
             </h4>
             <div className="flex space-x-4 mb-6">
@@ -89,8 +89,7 @@ const Footer = () => {
         <div className="pt-8 border-t border-slate-200 text-center text-xs text-slate-400">
           <p>© {new Date().getFullYear()} Tutor Hub Inc. All rights reserved. Connecting knowledge, together.</p>
         </div>
-       <button className='inline-flex items-center gap-2 px-7 py-3 bg-[#228B96] hover:bg-[#1a6f78] text-white font-medium text-base rounded-[10px] shadow-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0'> login</button>
-      </div>
+        </div>
     </footer>
   );
 };
