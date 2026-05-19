@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Button } from '@heroui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import ExtraSection from '@/components/extrasection';
 
 export default function NormalBannerSlider() {
 
@@ -77,6 +78,7 @@ export default function NormalBannerSlider() {
   };
 
   return (
+    <div>
     <div className="w-full max-w-5xl mx-auto my-8 px-4 relative group overflow-visible bg-transparent py-6 rounded-3xl">
 
       <div className="absolute inset-0 pointer-events-none overflow-visible z-[-1]">
@@ -167,5 +169,11 @@ export default function NormalBannerSlider() {
       </div>
 
     </div>
+    <ExtraSection></ExtraSection>
+    </div>
+
+   
+
+    
   );
 }
