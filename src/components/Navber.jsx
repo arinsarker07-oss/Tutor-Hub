@@ -4,11 +4,10 @@ import Link from "next/link"
 import { MobileMenu } from "./MobileMenu"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
+import { motion } from "framer-motion"
 
-export  function Navbar() {
-    const pathname= usePathname()
-    console.log(pathname);
-    
+export function Navbar() {
+    const pathname = usePathname()
     const navLinks = [
         { name: "Home", href: "/" },
         { name: "Tutors", href: "/tutors" },
@@ -36,27 +35,38 @@ export  function Navbar() {
 
                     {/* Nav Links for Desktop */}
                     <div className="hidden md:flex items-center space-x-10">
-                        {navLinks.map((link) => (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className="text-sm font-medium text-[#526677] transition-colors hover:text-[#2c93a6]"
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
+                        {navLinks.map((link) => {
+                            const isActive = pathname === link.href
+                            return (
+                                <Link
+                                    key={link.href}
+                                    href={link.href}
+                                    className={`${isActive ? " uppercase text-[#1D9299]" : "text-[#526677]"} relative text-sm font-medium  transition-colors hover:text-[#2c93a6]`}
+                                >
+                                    {link.name}
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeUnderline"
+                                            className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#2c93a6] rounded-full"
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        />
+                                    )}
+                                </Link>
+                            )
+
+                        })}
                     </div>
 
                     {/* Buttons for Desktop */}
                     <div className="hidden md:flex items-center space-x-4">
                         <Link href="/login">
-                            <button className="rounded-xl border border-slate-200 bg-white px-6 py-2.5 text-sm font-medium text-[#072133] transition-all hover:bg-slate-50 shadow-sm">
+                            <button className={`rounded-xl ${pathname === "/login" ? "bg-[#2c93a6] text-white" : "bg-white"}  px-6 py-2.5 text-sm font-medium  transition-all hover:bg-[#237888] hover:text-white shadow-sm`}>
                                 Login
                             </button>
                         </Link>
 
-                        <Link href="/register">
-                            <button className="rounded-xl bg-[#2c93a6] px-6 py-2.5 text-sm font-medium text-white transition-all hover:bg-[#237888] shadow-sm">
+                        <Link href="/signup">
+                            <button className={`rounded-xl ${pathname === "/signup" ? "bg-[#2c93a6] text-white" : "bg-white"}  px-6 py-2.5 text-sm font-medium  transition-all hover:bg-[#237888] hover:text-white shadow-sm`}>
                                 Sign Up
                             </button>
                         </Link>
