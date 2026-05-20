@@ -132,8 +132,8 @@ export default function TutorCardsSection() {
                                                 {tutor.hourly_fee} <span className="text-xs font-medium text-zinc-400 ml-0.5">/hr</span>
                                             </p>
                                         </div>
-                                        <Button size="sm" className="rounded-xl px-4 font-semibold text-xs text-white bg-[#237888] hover:bg-[#1a5c69] dark:bg-teal-600 dark:hover:bg-teal-500 shadow-sm transition-all">
-                                            Details
+                                        <Button size="lg" className="rounded-xl px-4 font-semibold text-xs text-white bg-[#237888] hover:bg-[#1a5c69] dark:bg-teal-600 dark:hover:bg-teal-500 shadow-sm transition-all">
+                                          View Details
                                         </Button>
                                     </div>
                                 </div>

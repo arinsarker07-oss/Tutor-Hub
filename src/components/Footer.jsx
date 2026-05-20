@@ -29,7 +29,7 @@ const Footer = () => {
             <ul className="space-y-3 text-sm text-slate-600">
               <li className="flex items-center gap-2 hover:text-[#000000] hover:underline">
                 <IoMailOutline size={18} className="text-slate-400" />
-                <a href="mailto:info@tutorhub.com" className=" transition-colors">info@tutorhub.com</a>
+                <a href="mailto:info@tutorhub.com" className=" transition-colors">support.tutorhub.bd@gmail.com</a>
               </li>
               <li className="flex items-center gap-2">
                 <IoCallOutline size={18} className="text-slate-400" />
@@ -37,7 +37,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-2 ">
                 <IoLocationOutline size={18} className="text-slate-400  mt-0.5" />
-                <span>123 Learning Lane,<br />Education City, EC 4562</span>
+                <span>Level 4, Genetic Plaza, Dhanmondi 27,<br /> Dhaka - 1209, Bangladesh.</span>
               </li>
             </ul>
           </div>

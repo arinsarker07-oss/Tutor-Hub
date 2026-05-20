@@ -5,6 +5,7 @@ import { Button } from '@heroui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ExtraSection from '@/components/extrasection';
+import ContactSection from '@/components/Contact';
 
 export default function NormalBannerSlider() {
 
@@ -170,6 +171,7 @@ export default function NormalBannerSlider() {
 
     </div>
     <ExtraSection></ExtraSection>
+    <ContactSection></ContactSection>
     </div>
 
    
