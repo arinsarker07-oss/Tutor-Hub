@@ -12,7 +12,7 @@ export default function ContactSection() {
   }
 
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 my-24 relative">
+    <section id='contact' className="w-full max-w-7xl mx-auto px-4 my-24 relative">
       <div className="absolute left-0 bottom-0 w-72 h-72 rounded-full bg-[#237888]/5 blur-[100px] pointer-events-none" />
       
       <div className="text-center mb-16">

@@ -49,6 +49,11 @@ export default function UserSignUpSection() {
     console.log("Success! Registering User Data:", { name, email, photo, password });
     alert("Check Console! Data printed successfully.");
   };
+      const GoogleSignUp = async () => {
+          const data = await authClient.signIn.social({
+              provider: "google",
+          });
+      };
 
   const formContainerVariants = {
     hidden: { opacity: 0, y: 40 },
@@ -192,7 +197,7 @@ export default function UserSignUpSection() {
             onClick={() => console.log("Google Auth Triggered")}
             className="w-full py-3 px-4 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2.5 group"
           >
-            <p className='flex gap-3 justify-center items-center  '>
+            <p onClick={GoogleSignUp} className='flex gap-3 justify-center items-center  '>
               <FcGoogle />
               Sign up with Google
             </p>

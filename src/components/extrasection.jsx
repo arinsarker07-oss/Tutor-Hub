@@ -33,7 +33,7 @@ export default function ExtraSection() {
   };
 
   return (
-    <div className="w-full bg-transparent overflow-x-hidden">
+    <div id="about-section" className="w-full bg-transparent overflow-x-hidden">
       
       <section className="w-full max-w-7xl mx-auto px-4 my-16">
         <motion.div 

@@ -3,7 +3,7 @@ import React from "react"
 import Link from "next/link"
 import { MobileMenu } from "./MobileMenu"
 import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { redirect, usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { authClient } from "@/lib/auth-client"
 import { Avatar } from "@heroui/react"
@@ -16,14 +16,17 @@ export function Navbar() {
 
     const signouthandle = async () => {
         await authClient.signOut();
+        redirect("/")
     }
 
     const pathname = usePathname()
+    console.log(pathname);
+    
     const navLinks = [
         { name: "Home", href: "/" },
         { name: "All Tutor", href: "/tutors" },
-        { name: "About", href: "/about" },
-        { name: "Contact", href: "/contact" },
+        { name: "About", href: "/#about-section" },
+        { name: "Contact", href: "/#contact" },
     ]
     const navlink = [
         { name: "Home", href: "/" },

@@ -85,7 +85,7 @@ export default function TutorCardsSection() {
     };
 
     const showMoreTutors = () => {
-        setVisibleCount((prevCount) => Math.min(prevCount + 10, filteredTutors.length));
+        setVisibleCount((prevCount) => Math.min(prevCount + 12, filteredTutors.length));
     };
 
     if (loading) {
