@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaGraduationCap, FaMapMarkerAlt, FaClock, FaBookOpen } from 'react-icons/fa';
 import Link from 'next/link';
 
-export default function TutorCardsSection() {
+export default function TutorCards() {
     // ১. আপনার data.json ফাইলের ডেটা রাখার জন্য স্টেট
     const [tutors, setTutors] = useState([]);
     const [visibleCount, setVisibleCount] = useState(6);
@@ -19,7 +19,7 @@ export default function TutorCardsSection() {
 
     // ২. JSON ফাইল থেকে ডেটা নিয়ে আসার জন্য useEffect
     useEffect(() => {
-        fetch('http://localhost:8000/TutorDetails')
+        fetch('http://localhost:8000/TutorDetail')
             .then((res) => res.json())
             .then((data) => {
                 setTutors(data);
@@ -85,7 +85,7 @@ export default function TutorCardsSection() {
     };
 
     const showMoreTutors = () => {
-        setVisibleCount((prevCount) => Math.min(prevCount + 10, filteredTutors.length));
+        setVisibleCount((prevCount) => Math.min(prevCount + 6, filteredTutors.length));
     };
 
     if (loading) {
@@ -106,7 +106,6 @@ export default function TutorCardsSection() {
 
             {/* সেকশন হেডার */}
             <div className="text-center mb-6">
-                <p className="text-3xl md:text-5xl bg-gradient-to-t from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent  tracking-tight font-black">All Tutors</p>
                 <h2 className="text-2xl md:text-4xl font-extrabold text-zinc-800 dark:text-white tracking-tight">
                     Find Your Perfect <span className="text-[#237888] dark:text-teal-400">Expert Tutor</span>
                 </h2>
@@ -192,7 +191,7 @@ export default function TutorCardsSection() {
                 <AnimatePresence mode="popLayout">
                     {filteredTutors.slice(0, visibleCount).map((tutor, index) => (
                         <motion.div
-                            key={tutor.id || index}
+                            key={tutor._id || index}
                             initial={{ opacity: 0, y: 25 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95 }}
@@ -274,6 +273,7 @@ export default function TutorCardsSection() {
                                             Book Session
                                         </Button>                                       
                                         </Link>
+
                                     </div>
                                 </div>
                             </Card>
@@ -283,13 +283,14 @@ export default function TutorCardsSection() {
             </div>
 
             {/* View More বাটন */}
-            {visibleCount < filteredTutors.length && (
+            <Link href={"/tutors"}>
                 <div className="flex justify-center mt-12">
-                    <Button onClick={showMoreTutors} size="lg" variant="bordered" className="rounded-xl px-8 py-3 text-sm font-bold text-black border-zinc-300 dark:border-zinc-700 hover:bg-[#238883] dark:hover:border-teal-400 hover:text-white dark:text-zinc-300 dark:hover:text-teal-400 bg-white dark:bg-zinc-900 shadow-sm transition-all duration-300">
-                        View More Tutors
+                    <Button onClick={showMoreTutors} size="lg" variant="bordered" className="rounded-xl px-8 py-3 text-sm font-bold  border-zinc-300 dark:border-zinc-700 bg-[#5dc5f1] dark:hover:border-teal-400 hover:text-white dark:text-zinc-300 dark:hover:text-teal-400 text-black dark:bg-zinc-900 shadow-sm transition-all duration-300">
+                        ALL Tutors
                     </Button>
                 </div>
-            )}
+            </Link>
+
         </div>
     );
 }

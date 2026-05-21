@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import ExtraSection from '@/components/extrasection';
 import ContactSection from '@/components/Contact';
+import TutorCards from '@/components/TutorCardHome';
 
 export default function NormalBannerSlider() {
 
@@ -170,6 +171,7 @@ export default function NormalBannerSlider() {
       </div>
 
     </div>
+    <TutorCards></TutorCards>
     <ExtraSection></ExtraSection>
     <ContactSection></ContactSection>
     </div>
