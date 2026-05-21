@@ -21,10 +21,34 @@ const TutorDetails = ({ initialTutorData }) => {
         data: session,
     } = authClient.useSession()
     const user = session?.user
-    console.log(user);
-    
+
     const [tutor, setTutor] = useState(initialTutorData);
     const [isOpen, setIsOpen] = useState(false);
+
+    const handleBooking = async () => {
+        const bookingData = {
+        student_email: user.email,
+        tutor_name: tutor.tutor_name,
+        tutor_id: tutor._id,
+        student_name: studentName,
+        phone: phone,
+        booking_date: new Date()
+    };
+        console.log(bookingData);
+
+        const res = await fetch("http://localhost:8000/booking",{
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(bookingData)
+        })
+        const data = await res.json()
+        console.log(data);
+        
+
+
+    }
 
     // ফর্ম স্টেট
     const [studentName, setStudentName] = useState("");
@@ -88,8 +112,8 @@ const TutorDetails = ({ initialTutorData }) => {
                 {/* অ্যালার্ট নোটিফিকেশন */}
                 {alertMessage && (
                     <div className={`mb-6 p-4 rounded-xl text-sm font-medium border shadow-sm flex items-center gap-2 transition-all ${alertType === "error"
-                            ? "bg-red-50 text-red-700 border-red-200"
-                            : "bg-teal-50 text-teal-800 border-teal-200"
+                        ? "bg-red-50 text-red-700 border-red-200"
+                        : "bg-teal-50 text-teal-800 border-teal-200"
                         }`}>
                         <span>{alertMessage}</span>
                     </div>
@@ -322,6 +346,7 @@ const TutorDetails = ({ initialTutorData }) => {
                                         Cancel
                                     </button>
                                     <button
+                                        onClick={handleBooking}
                                         type="submit"
                                         className="px-5 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-sm transition-colors"
                                     >
