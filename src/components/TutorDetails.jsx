@@ -14,7 +14,15 @@ import {
     FaCheckCircle,
     FaTimes
 } from "react-icons/fa";
-const TutorDetails = ({initialTutorData}) => {
+import { authClient } from "@/lib/auth-client";
+
+const TutorDetails = ({ initialTutorData }) => {
+    const {
+        data: session,
+    } = authClient.useSession()
+    const user = session?.user
+    console.log(user);
+    
     const [tutor, setTutor] = useState(initialTutorData);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -25,11 +33,11 @@ const TutorDetails = ({initialTutorData}) => {
 
     // মেসেজ স্টেট
     const [alertMessage, setAlertMessage] = useState("");
-    const [alertType, setAlertType] = useState(""); 
+    const [alertType, setAlertType] = useState("");
 
     // বুকিং বাটন ক্লিক লজিক
     const handleBookingClick = () => {
-        const currentDate = new Date("2026-05-20"); 
+        const currentDate = new Date("2026-05-20");
         const sessionStartDate = new Date(tutor.session_start_date);
 
         if (tutor.total_slots === 0) {
@@ -79,11 +87,10 @@ const TutorDetails = ({initialTutorData}) => {
 
                 {/* অ্যালার্ট নোটিফিকেশন */}
                 {alertMessage && (
-                    <div className={`mb-6 p-4 rounded-xl text-sm font-medium border shadow-sm flex items-center gap-2 transition-all ${
-                        alertType === "error"
+                    <div className={`mb-6 p-4 rounded-xl text-sm font-medium border shadow-sm flex items-center gap-2 transition-all ${alertType === "error"
                             ? "bg-red-50 text-red-700 border-red-200"
                             : "bg-teal-50 text-teal-800 border-teal-200"
-                    }`}>
+                        }`}>
                         <span>{alertMessage}</span>
                     </div>
                 )}
@@ -200,20 +207,20 @@ const TutorDetails = ({initialTutorData}) => {
                 {isOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         {/* ব্যাকড্রপ ব্লার */}
-                        <div 
-                            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity" 
+                        <div
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                             onClick={() => setIsOpen(false)}
                         ></div>
 
                         {/* মোডাল কন্টেন্ট বক্স */}
                         <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl z-10 overflow-hidden border border-gray-100 transition-all transform scale-100">
                             <form onSubmit={handleConfirmBooking}>
-                                
+
                                 {/* মোডাল হেডার */}
                                 <div className="flex justify-between items-center text-xl font-bold text-slate-800 border-b border-gray-100 px-6 py-4">
                                     <h2>Confirm Your Booking</h2>
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         onClick={() => setIsOpen(false)}
                                         className="text-gray-400 hover:text-gray-600 p-1 rounded-lg transition-colors"
                                     >
@@ -223,14 +230,14 @@ const TutorDetails = ({initialTutorData}) => {
 
                                 {/* মোডাল বডি */}
                                 <div className="p-6 flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
-                                    
+
                                     {/* টিউটর আইডি */}
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Tutor ID</label>
-                                        <input 
-                                            type="text" 
-                                            value={tutor._id} 
-                                            disabled 
+                                        <input
+                                            type="text"
+                                            value={tutor._id}
+                                            disabled
                                             className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 text-sm outline-none"
                                         />
                                     </div>
@@ -238,10 +245,10 @@ const TutorDetails = ({initialTutorData}) => {
                                     {/* টিউটর নাম */}
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Tutor Name</label>
-                                        <input 
-                                            type="text" 
-                                            value={tutor.tutor_name} 
-                                            disabled 
+                                        <input
+                                            type="text"
+                                            value={tutor.tutor_name}
+                                            disabled
                                             className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 text-sm outline-none"
                                         />
                                     </div>
@@ -253,10 +260,10 @@ const TutorDetails = ({initialTutorData}) => {
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                                 <FaEnvelope />
                                             </span>
-                                            <input 
-                                                type="email" 
-                                                value={loggedInUserEmail} 
-                                                disabled 
+                                            <input
+                                                type="email"
+                                                value={loggedInUserEmail}
+                                                disabled
                                                 className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 text-sm outline-none"
                                             />
                                         </div>
@@ -269,8 +276,8 @@ const TutorDetails = ({initialTutorData}) => {
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                                 <FaUser />
                                             </span>
-                                            <input 
-                                                type="text" 
+                                            <input
+                                                type="text"
                                                 required
                                                 placeholder="Enter your full name"
                                                 value={studentName}
@@ -287,8 +294,8 @@ const TutorDetails = ({initialTutorData}) => {
                                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                                 <FaPhone />
                                             </span>
-                                            <input 
-                                                type="tel" 
+                                            <input
+                                                type="tel"
                                                 required
                                                 placeholder="Enter your phone number"
                                                 value={phone}
@@ -307,15 +314,15 @@ const TutorDetails = ({initialTutorData}) => {
 
                                 {/* মোডাল ফুটার */}
                                 <div className="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 bg-gray-50/50">
-                                    <button 
-                                        type="button" 
-                                        onClick={() => setIsOpen(false)} 
+                                    <button
+                                        type="button"
+                                        onClick={() => setIsOpen(false)}
                                         className="px-4 py-2 text-sm font-semibold text-red-600 bg-red-50 hover:bg-red-100 rounded-xl transition-colors"
                                     >
                                         Cancel
                                     </button>
-                                    <button 
-                                        type="submit" 
+                                    <button
+                                        type="submit"
                                         className="px-5 py-2 text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-xl shadow-sm transition-colors"
                                     >
                                         Confirm Booking

@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from '@/lib/auth-client';
 import React from 'react';
 import {
   FaUser,
@@ -15,6 +16,11 @@ import {
   FaUserPlus
 } from 'react-icons/fa';
 export default function TutorRegisterSection() {
+  const {
+    data: session,
+  } = authClient.useSession()
+  const user = session?.user
+  console.log(user);
 
   const handleTutorSignUp = async (e) => {
     e.preventDefault(); // পেজ রিলোড হওয়া বন্ধ করবে
@@ -38,6 +44,7 @@ export default function TutorRegisterSection() {
       experience: formData.get('experience'),
       location: formData.get('location'),
       teaching_mode: formData.get('teaching_mode'),
+      user_email: user.email,
     };
 
     try {

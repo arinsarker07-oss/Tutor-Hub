@@ -13,7 +13,6 @@ export function Navbar() {
         data: session,
     } = authClient.useSession()
     const user = session?.user
-    console.log(user);
 
     const signouthandle = async () => {
         await authClient.signOut();
@@ -22,12 +21,13 @@ export function Navbar() {
     const pathname = usePathname()
     const navLinks = [
         { name: "Home", href: "/" },
-        { name: "Tutors", href: "/tutors" },
+        { name: "All Tutor", href: "/tutors" },
         { name: "About", href: "/about" },
         { name: "Contact", href: "/contact" },
     ]
     const navlink = [
         { name: "Home", href: "/" },
+        { name: "All Tutor", href: "/tutors" },
         { name: "My Tutor", href: "/MyTutor" },
         { name: "Add Tutor", href: "/TutorRegister" },
         { name: "Booked Session", href: "/BookedSession" },
