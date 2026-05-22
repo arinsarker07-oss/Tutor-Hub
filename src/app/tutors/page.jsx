@@ -257,7 +257,7 @@ export default function TutorCardsSection() {
                                                 {tutor.hourly_fee}
                                             </p>
                                         </div>
-                                        <Link href={`/${tutor._id}`} className="shrink-0">
+                                        <Link href={`Detail/${tutor._id}`} className="shrink-0">
                                             <Button size="sm" className="rounded-lg md:rounded-xl px-2 md:px-4 font-semibold text-[9px] md:text-xs text-white bg-[#237888] hover:bg-[#1a5c69] dark:bg-teal-600 dark:hover:bg-teal-500 h-6.5 md:h-10 transition-all min-w-0">
                                                 Book
                                             </Button>

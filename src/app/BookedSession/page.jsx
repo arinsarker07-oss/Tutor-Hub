@@ -1,35 +1,66 @@
 'use client';
 
+import { authClient } from "@/lib/auth-client";
 import React, { useEffect, useState } from "react";
 import { FaTimes, FaUser, FaPhone, FaEnvelope, FaChalkboardTeacher } from "react-icons/fa";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function BookedSessionsPage() {
+  const { data: session } = authClient.useSession();
+  const user = session?.user.email;
+  
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
-  const email = "arinsarker07@gmail.com";
 
   useEffect(() => {
-    fetch(`http://localhost:8000/booking/${email}`)
-      .then((res) => res.json())
-      .then((data) => setBookings(data))
-      .catch((err) => console.error("Error fetching data:", err));
-  }, [email]);
+    if (user) {
+      fetch(`http://localhost:8000/booking/${user}`)
+        .then((res) => res.json())
+        .then((data) => setBookings(data))
+        .catch((err) => console.error("Error fetching data:", err));
+    }
+  }, [user]);
 
-  const handleConfirmCancel = () => {
-    const updatedBookings = bookings.map(b => 
-      b._id === selectedId ? { ...b, status: 'cancelled' } : b
-    );
-    setBookings(updatedBookings);
-    setShowModal(false);
-    
-    toast.success("Session cancelled successfully!", {
-      position: "top-right",
-      autoClose: 2000,
-      theme: "dark",
-    });
+
+  const handleConfirmCancel = async () => {
+    if (!selectedId) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/booking/${selectedId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      const responseData = await res.json();
+
+      if (res.ok && responseData.success) {
+
+        const updatedBookings = bookings.filter(b => b._id !== selectedId);
+        setBookings(updatedBookings);
+        setShowModal(false);
+
+        toast.success("Session deleted permanently from database!", {
+          position: "top-right",
+          autoClose: 2000,
+          theme: "dark",
+        });
+      } else {
+        toast.error(responseData.message || "Failed to delete session.", {
+          position: "top-right",
+          theme: "dark",
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting session:", error);
+      toast.error("Failed to connect to the server.", {
+        position: "top-right",
+        theme: "dark",
+      });
+    }
   };
 
   return (
@@ -43,25 +74,23 @@ export default function BookedSessionsPage() {
         </div>
       ) : (
         <>
-
+          {/* Mobile view */}
           <div className="grid grid-cols-1 gap-4 md:hidden">
             {bookings.map((item) => (
               <div key={item._id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3 relative">
-                {item.status !== 'cancelled' && (
-                  <button 
-                    onClick={() => { setSelectedId(item._id); setShowModal(true); }}
-                    className="absolute top-4 right-4 text-red-500 hover:text-red-700 p-1"
-                  >
-                    <FaTimes size={18} />
-                  </button>
-                )}
-                
+                <button
+                  onClick={() => { setSelectedId(item._id); setShowModal(true); }}
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-700 p-1"
+                >
+                  <FaTimes size={18} />
+                </button>
+
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-zinc-800 font-bold text-base">
                     <FaUser className="text-gray-400 text-sm" />
                     <span>{item.student_name}</span>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 text-xs text-zinc-600">
                     <FaChalkboardTeacher className="text-[#237888]" />
                     <span>Tutor: <span className="font-semibold">{item.tutor_name}</span></span>
@@ -80,8 +109,7 @@ export default function BookedSessionsPage() {
 
                 <div className="pt-2 border-t border-gray-50 flex justify-between items-center">
                   <span className="text-xs font-medium text-zinc-400">Status</span>
-                  <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold 
-                    ${item.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                  <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-50 text-green-600">
                     {item.status || "Confirmed"}
                   </span>
                 </div>
@@ -89,7 +117,7 @@ export default function BookedSessionsPage() {
             ))}
           </div>
 
-
+          {/* Desktop view */}
           <div className="hidden md:block overflow-x-auto shadow-sm rounded-2xl border border-gray-100">
             <table className="min-w-full bg-white text-left">
               <thead className="bg-gray-50 border-b border-gray-100 text-zinc-500 text-xs uppercase font-bold tracking-wider">
@@ -110,20 +138,17 @@ export default function BookedSessionsPage() {
                     <td className="py-4 px-6">{item.tutor_name}</td>
                     <td className="py-4 px-6">{item.student_email}</td>
                     <td className="py-4 px-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold 
-                        ${item.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                      <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-600">
                         {item.status || "Confirmed"}
                       </span>
                     </td>
                     <td className="py-4 px-6 text-center">
-                      {item.status !== 'cancelled' && (
-                        <button 
-                          onClick={() => { setSelectedId(item._id); setShowModal(true); }}
-                          className="text-red-500 hover:text-red-700 transition inline-flex items-center justify-center p-1"
-                        >
-                          <FaTimes size={16} />
-                        </button>
-                      )}
+                      <button
+                        onClick={() => { setSelectedId(item._id); setShowModal(true); }}
+                        className="text-red-500 hover:text-red-700 transition inline-flex items-center justify-center p-1"
+                      >
+                        <FaTimes size={16} />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -133,6 +158,7 @@ export default function BookedSessionsPage() {
         </>
       )}
 
+      {/* Confirmation Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center space-y-4">
@@ -140,21 +166,21 @@ export default function BookedSessionsPage() {
               <FaTimes size={20} />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-zinc-900">Confirm Cancellation</h2>
-              <p className="text-sm text-zinc-500 mt-1">Are you sure you want to cancel this session?</p>
+              <h2 className="text-lg font-bold text-zinc-900">Confirm Delete</h2>
+              <p className="text-sm text-zinc-500 mt-1">Are you sure you want to delete this session permanently?</p>
             </div>
             <div className="flex gap-3 pt-2">
-              <button 
-                onClick={() => setShowModal(false)} 
+              <button
+                onClick={() => setShowModal(false)}
                 className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 py-2.5 rounded-xl font-semibold text-sm transition"
               >
                 No
               </button>
-              <button 
-                onClick={handleConfirmCancel} 
+              <button
+                onClick={handleConfirmCancel}
                 className="w-full bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-semibold text-sm transition shadow-md"
               >
-                Yes, Cancel
+                Yes, Delete
               </button>
             </div>
           </div>
