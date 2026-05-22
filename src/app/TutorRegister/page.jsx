@@ -46,7 +46,7 @@ export default function TutorRegisterSection() {
     };
 
     try {
-      const res = await fetch('http://localhost:8000/TutorDetails', {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/TutorDetails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

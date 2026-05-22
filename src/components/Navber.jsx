@@ -2,11 +2,12 @@
 import React, { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { redirect, usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation" // redirect er poriborte useRouter anlam
 import { motion } from "framer-motion"
 import { authClient } from "@/lib/auth-client"
 import { Avatar } from "@heroui/react"
 import { HiMenu, HiX } from "react-icons/hi"
+import { toast } from "react-toastify" // Toastify import korlam
 
 function MobileMenu({ navLinks, user, signouthandle, pathname }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -86,10 +87,35 @@ export function Navbar() {
     const { data: session } = authClient.useSession()
     const user = session?.user
     const pathname = usePathname()
+    const router = useRouter() // Router instance nibo handle korar jono
 
     const signouthandle = async () => {
-        await authClient.signOut();
-        redirect("/")
+        try {
+            // 1. Toastify te loading state start korlam
+            const toastId = toast.loading("Logging out... Please wait.");
+            
+            // 2. AuthClient signout execute korbe
+            await authClient.signOut();
+            
+            // 3. Kaj successful hole success toast dekhabe
+            toast.update(toastId, { 
+                render: "Logged out successfully!", 
+                type: "success", 
+                isLoading: false,
+                autoClose: 2000 
+            });
+
+            // 4. Ektu delay diye push kora safe jate user toast-ta dekhte pay
+            setTimeout(() => {
+                router.push("/");
+                router.refresh(); // Session state full clean korar jono cache refresh kora bhalo
+            }, 1000);
+
+        } catch (error) {
+            // Konobhabe error ashle sheta handle korbe
+            toast.error("Something went wrong while logging out.");
+            console.error("Signout error:", error);
+        }
     }
 
     const navLinksOut = [

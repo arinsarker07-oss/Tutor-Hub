@@ -21,7 +21,7 @@ export default function MyTutorPage() {
 
     useEffect(() => {
         if (!userEmail) return;
-        fetch(`http://localhost:8000/my-tutors/${userEmail}`)
+        fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/my-tutors/${userEmail}`)
             .then(res => res.json())
             .then(data => setTutors(data))
             .catch(err => console.error("Error fetching tutors:", err));
@@ -35,7 +35,7 @@ export default function MyTutorPage() {
         const updatedData = Object.fromEntries(formData);
 
         try {
-            const response = await fetch(`http://localhost:8000/update-tutor/${selectedTutor._id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/update-tutor/${selectedTutor._id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData)
@@ -75,7 +75,7 @@ export default function MyTutorPage() {
     const confirmDelete = () => {
         if (!tutorToDelete) return;
 
-        fetch(`http://localhost:8000/delete-tutor/${tutorToDelete}`, {
+        fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/delete-tutor/${tutorToDelete}`, {
             method: 'DELETE',
         })
             .then(res => res.json())

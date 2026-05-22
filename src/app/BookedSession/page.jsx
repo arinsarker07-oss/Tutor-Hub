@@ -17,7 +17,7 @@ export default function BookedSessionsPage() {
 
   useEffect(() => {
     if (user) {
-      fetch(`http://localhost:8000/booking/${user}`)
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${user}`)
         .then((res) => res.json())
         .then((data) => setBookings(data))
         .catch((err) => console.error("Error fetching data:", err));
@@ -32,7 +32,7 @@ export default function BookedSessionsPage() {
     console.log(tokenData);
 
     try {
-      const res = await fetch(`http://localhost:8000/booking/${selectedId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/booking/${selectedId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

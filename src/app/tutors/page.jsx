@@ -18,7 +18,7 @@ export default function TutorCardsSection() {
     const [endDate, setEndDate] = useState('');
 
     useEffect(() => {
-        fetch('http://localhost:8000/TutorDetails')
+        fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/TutorDetails`)
             .then((res) => res.json())
             .then((data) => {
                 setTutors(data);

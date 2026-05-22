@@ -12,7 +12,7 @@ export default async function TutorDetailsPage({params}) {
     })
     console.log(token);
     
-    const res = await fetch(`http://localhost:8000/TutorDetails/${id}`,{
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/TutorDetails/${id}`,{
      // authorization for token
         headers:{
             authorization: `Bearer ${token}`
