@@ -62,12 +62,15 @@ const TutorDetails = ({ initialTutorData }) => {
             phone: phone,
             booking_date: new Date()
         };
-
+              const {data: tokenData } = await authClient.token()
+              console.log(tokenData);
+              
         try {
             const res = await fetch("http://localhost:8000/booking", {
                 method: "POST",
                 headers: {
-                    "content-type": "application/json"
+                    "content-type": "application/json",
+                     authorization:`Bearer ${tokenData?.token}`
                 },
                 body: JSON.stringify(bookingData)
             });

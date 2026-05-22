@@ -9,10 +9,11 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function BookedSessionsPage() {
   const { data: session } = authClient.useSession();
   const user = session?.user.email;
-  
+
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+
 
   useEffect(() => {
     if (user) {
@@ -26,12 +27,17 @@ export default function BookedSessionsPage() {
 
   const handleConfirmCancel = async () => {
     if (!selectedId) return;
+    // token genaret for client component 
+    const { data: tokenData } = await authClient.token()
+    console.log(tokenData);
 
     try {
       const res = await fetch(`http://localhost:8000/booking/${selectedId}`, {
         method: "DELETE",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          // authorization for token
+          authorization: `Bearer ${tokenData?.token}`
         }
       });
 
