@@ -6,9 +6,11 @@ import { FcGoogle } from 'react-icons/fc';
 import Link from 'next/link';
 import PasswordShow from '@/components/Passwordshow';
 import { authClient } from '@/lib/auth-client';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 export default function UserLoginSection() {
+    const router = useRouter();
     const [loginData, setLoginData] = useState({
         email: '',
         password: ''
@@ -25,22 +27,39 @@ export default function UserLoginSection() {
         const { data, error } = await authClient.signIn.email({
             email: loginData.email,
             password: loginData.password,
-        })
-        if (data) {
-            redirect("/")
-        }
-        if (error) {
-            // "toast"
-        }
-        console.log({ data, error });
-        console.log("Attempting Login with:", loginData);
-
-        alert("Login Form Submitted! Check your console.");
-    };
-    const GoogleSignIn = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
         });
+
+        if (data) {
+            toast.success("Login Successful!", {
+                position: "top-right",
+                autoClose: 2000,
+                theme: "dark",
+            });
+            router.push("/");
+        }
+
+        if (error) {
+            toast.error(error.message || "Invalid Email or Password!", {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "dark",
+            });
+        }
+    };
+
+    const GoogleSignIn = async () => {
+        try {
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/"
+            });
+        } catch (error) {
+            toast.error("Google Sign-In Failed!", {
+                position: "top-right",
+                autoClose: 3000,
+                theme: "dark",
+            });
+        }
     };
 
     const containerVariants = {
@@ -66,7 +85,7 @@ export default function UserLoginSection() {
     };
 
     return (
-        <section className="w-full max-w-md mx-auto px-4 mt-3 mb-20 relative">
+        <section className="w-full max-w-md mx-auto px-4 min-h-[calc(100vh-120px)] flex items-center justify-center relative py-10">
             <div className="absolute inset-0 z-0 opacity-40 dark:opacity-20 pointer-events-none">
                 <div className="absolute top-[-5%] right-[-5%] w-[45%] h-[45%] rounded-full bg-gradient-to-br from-[#237888]/20 to-transparent blur-[100px]" />
                 <div className="absolute bottom-[-5%] left-[-5%] w-[45%] h-[45%] rounded-full bg-gradient-to-tr from-teal-100/30 to-transparent blur-[100px]" />
@@ -76,10 +95,10 @@ export default function UserLoginSection() {
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-slate-100 dark:border-zinc-800 rounded-2xl p-5 md:p-6 shadow-xl shadow-slate-100/40 dark:shadow-none space-y-4 relative z-10"
+                className="w-full bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-slate-100 dark:border-zinc-800 rounded-2xl p-5 md:p-6 shadow-xl dark:shadow-none space-y-4 relative z-10"
             >
                 <div className="text-center">
-                    <span className="text-[10px] px-3 font-bold uppercase tracking-widest text-[#237888] dark:text-teal-400 bg-[#237888]/10 dark:bg-teal-500/10 px-2.5 py-1 rounded-full">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#237888] dark:text-teal-400 bg-[#237888]/10 dark:bg-teal-500/10 px-2.5 py-1 rounded-full">
                         Welcome Back
                     </span>
                     <h2 className="text-2xl font-extrabold bg-gradient-to-l from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent dark:text-white tracking-tight mt-3">
@@ -90,8 +109,7 @@ export default function UserLoginSection() {
                     </p>
                 </div>
 
-                <form onSubmit={handleLoginClick} className="space-y-5 ">
-
+                <form onSubmit={handleLoginClick} className="space-y-5">
                     <motion.div variants={itemVariants} className="flex flex-col space-y-1.5">
                         <label className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400">Email Address</label>
                         <div className="relative flex items-center group">
@@ -111,7 +129,6 @@ export default function UserLoginSection() {
                     <motion.div variants={itemVariants} className="flex flex-col space-y-1">
                         <div className="flex justify-between items-center">
                             <label className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400">Password</label>
-
                             <Link
                                 href="/forgot-password"
                                 className="text-[11px] font-bold text-[#237888] dark:text-teal-400 hover:underline transition-all"
@@ -119,14 +136,13 @@ export default function UserLoginSection() {
                                 Forgot Password?
                             </Link>
                         </div>
-
                         <PasswordShow
                             value={loginData.password}
                             onChange={(e) => setLoginData(prev => ({ ...prev, password: e.target.value }))}
                         />
                     </motion.div>
 
-                    <motion.div variants={itemVariants} >
+                    <motion.div variants={itemVariants}>
                         <motion.button
                             type="submit"
                             whileHover={{ scale: 1.02 }}
@@ -139,7 +155,7 @@ export default function UserLoginSection() {
                     </motion.div>
                 </form>
 
-                <motion.div variants={itemVariants} >
+                <motion.div variants={itemVariants}>
                     <p className='text-center font-bold'>OR</p>
                 </motion.div>
 
@@ -151,10 +167,10 @@ export default function UserLoginSection() {
                         onClick={GoogleSignIn}
                         className="w-full py-3 px-4 border border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 text-zinc-700 dark:text-zinc-300 font-bold text-sm rounded-xl transition-colors flex items-center justify-center gap-2.5 group"
                     >
-                        <p className='flex gap-3 justify-center items-center  '>
+                        <div className='flex gap-3 justify-center items-center'>
                             <FcGoogle />
-                            Login with Google
-                        </p>
+                            <span>Login with Google</span>
+                        </div>
                     </motion.button>
                 </motion.div>
 
@@ -167,7 +183,6 @@ export default function UserLoginSection() {
                         SignUp Now
                     </Link>
                 </motion.p>
-
             </motion.div>
         </section>
     );

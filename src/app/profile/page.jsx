@@ -126,7 +126,7 @@ const ProfilePage = () => {
                 </div>
 
                 <CardFooter className="pt-0 pb-8 px-6">
-                    {/* modal form */}
+
                     <Modal>
                         <Button
                             className="w-full bg-gray-900 text-white shadow-lg font-semibold h-12"

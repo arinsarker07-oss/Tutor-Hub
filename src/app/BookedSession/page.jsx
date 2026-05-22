@@ -1,7 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaUser, FaPhone, FaEnvelope, FaChalkboardTeacher } from "react-icons/fa";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function BookedSessionsPage() {
   const [bookings, setBookings] = useState([]);
@@ -16,77 +18,142 @@ export default function BookedSessionsPage() {
       .catch((err) => console.error("Error fetching data:", err));
   }, [email]);
 
-  // শুধুমাত্র ফ্রন্টএন্ডে স্ট্যাটাস আপডেট করার ফাংশন
   const handleConfirmCancel = () => {
     const updatedBookings = bookings.map(b => 
       b._id === selectedId ? { ...b, status: 'cancelled' } : b
     );
     setBookings(updatedBookings);
-    setShowModal(false); // মোডাল বন্ধ করে দিন
+    setShowModal(false);
+    
+    toast.success("Session cancelled successfully!", {
+      position: "top-right",
+      autoClose: 2000,
+      theme: "dark",
+    });
   };
 
   return (
-    <div className="container mx-auto py-10 px-4">
-      <h1 className="text-2xl font-bold mb-6">Booked Sessions</h1>
+    <div className="container mx-auto py-6 md:py-10 px-4">
+      <ToastContainer />
+      <h1 className="text-xl md:text-2xl font-bold mb-6 text-zinc-900">Booked Sessions</h1>
 
       {bookings.length === 0 ? (
         <div className="text-center py-20 text-gray-500">
           <p className="text-xl">No booked sessions found.</p>
         </div>
       ) : (
-        <div className="overflow-x-auto shadow-md rounded-lg border border-gray-200">
-          <table className="min-w-full bg-white text-left">
-            <thead className="bg-gray-50 border-b">
-              <tr>
-                <th className="py-3 px-6">Name</th>
-                <th className="py-3 px-6">Phone</th>
-                <th className="py-3 px-6">Tutor Name</th>
-                <th className="py-3 px-6">Email</th>
-                <th className="py-3 px-6">Status</th>
-                <th className="py-3 px-6">Cancel</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bookings.map((item) => (
-                <tr key={item._id} className="border-b hover:bg-gray-50">
-                  <td className="py-4 px-6">{item.student_name}</td>
-                  <td className="py-4 px-6">{item.phone}</td>
-                  <td className="py-4 px-6">{item.tutor_name}</td>
-                  <td className="py-4 px-6">{item.student_email}</td>
-                  <td className="py-4 px-6">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium 
-                      ${item.status === 'cancelled' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
-                      {item.status || "Confirmed"}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    {item.status !== 'cancelled' && (
-                      <button 
-                        onClick={() => { setSelectedId(item._id); setShowModal(true); }}
-                        className="text-red-500 hover:text-red-700 text-xl"
-                      >
-                        <FaTimes />
-                      </button>
-                    )}
-                  </td>
+        <>
+
+          <div className="grid grid-cols-1 gap-4 md:hidden">
+            {bookings.map((item) => (
+              <div key={item._id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm space-y-3 relative">
+                {item.status !== 'cancelled' && (
+                  <button 
+                    onClick={() => { setSelectedId(item._id); setShowModal(true); }}
+                    className="absolute top-4 right-4 text-red-500 hover:text-red-700 p-1"
+                  >
+                    <FaTimes size={18} />
+                  </button>
+                )}
+                
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-zinc-800 font-bold text-base">
+                    <FaUser className="text-gray-400 text-sm" />
+                    <span>{item.student_name}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-xs text-zinc-600">
+                    <FaChalkboardTeacher className="text-[#237888]" />
+                    <span>Tutor: <span className="font-semibold">{item.tutor_name}</span></span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-zinc-600">
+                    <FaPhone className="text-gray-400" />
+                    <span>{item.phone}</span>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-zinc-600 truncate">
+                    <FaEnvelope className="text-gray-400" />
+                    <span className="truncate">{item.student_email}</span>
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-gray-50 flex justify-between items-center">
+                  <span className="text-xs font-medium text-zinc-400">Status</span>
+                  <span className={`px-2.5 py-1 rounded-full text-[11px] font-semibold 
+                    ${item.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                    {item.status || "Confirmed"}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+          <div className="hidden md:block overflow-x-auto shadow-sm rounded-2xl border border-gray-100">
+            <table className="min-w-full bg-white text-left">
+              <thead className="bg-gray-50 border-b border-gray-100 text-zinc-500 text-xs uppercase font-bold tracking-wider">
+                <tr>
+                  <th className="py-4 px-6">Name</th>
+                  <th className="py-4 px-6">Phone</th>
+                  <th className="py-4 px-6">Tutor Name</th>
+                  <th className="py-4 px-6">Email</th>
+                  <th className="py-4 px-6">Status</th>
+                  <th className="py-4 px-6 text-center">Cancel</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-gray-100 text-sm text-zinc-700">
+                {bookings.map((item) => (
+                  <tr key={item._id} className="hover:bg-gray-50/50 transition">
+                    <td className="py-4 px-6 font-medium text-zinc-900">{item.student_name}</td>
+                    <td className="py-4 px-6">{item.phone}</td>
+                    <td className="py-4 px-6">{item.tutor_name}</td>
+                    <td className="py-4 px-6">{item.student_email}</td>
+                    <td className="py-4 px-6">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold 
+                        ${item.status === 'cancelled' ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600'}`}>
+                        {item.status || "Confirmed"}
+                      </span>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      {item.status !== 'cancelled' && (
+                        <button 
+                          onClick={() => { setSelectedId(item._id); setShowModal(true); }}
+                          className="text-red-500 hover:text-red-700 transition inline-flex items-center justify-center p-1"
+                        >
+                          <FaTimes size={16} />
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
 
-      {/* কনফার্মেশন মোডাল */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-white p-8 rounded-2xl shadow-2xl w-96">
-            <h2 className="text-xl font-bold mb-4">Confirm Cancellation</h2>
-            <p className="mb-6 text-gray-600">Are you sure you want to cancel this session?</p>
-            <div className="flex justify-end gap-3">
-              <button onClick={() => setShowModal(false)} className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg font-semibold">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center space-y-4">
+            <div className="mx-auto bg-red-50 text-red-500 w-12 h-12 rounded-full flex items-center justify-center">
+              <FaTimes size={20} />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-zinc-900">Confirm Cancellation</h2>
+              <p className="text-sm text-zinc-500 mt-1">Are you sure you want to cancel this session?</p>
+            </div>
+            <div className="flex gap-3 pt-2">
+              <button 
+                onClick={() => setShowModal(false)} 
+                className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 py-2.5 rounded-xl font-semibold text-sm transition"
+              >
                 No
               </button>
-              <button onClick={handleConfirmCancel} className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold">
+              <button 
+                onClick={handleConfirmCancel} 
+                className="w-full bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-semibold text-sm transition shadow-md"
+              >
                 Yes, Cancel
               </button>
             </div>

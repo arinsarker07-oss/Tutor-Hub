@@ -1,11 +1,11 @@
 import React from 'react';
-import { HashLoader } from 'react-spinners';
+import {  FadeLoader } from 'react-spinners';
 
 const loading = () => {
     return (
-        <div>
-            <HashLoader
-                color="#0ee1dd"
+        <div className='flex justify-center items-center h-screen w-full p-40'>
+            <FadeLoader
+                color="#0026ff"
                 cssOverride={{}}
                 loading
                 size={100}

@@ -50,16 +50,16 @@ const TutorDetails = ({ initialTutorData }) => {
 
     }
 
-    // ফর্ম স্টেট
+
     const [studentName, setStudentName] = useState("");
     const [phone, setPhone] = useState("");
     const loggedInUserEmail = "student@example.com";
 
-    // মেসেজ স্টেট
+  
     const [alertMessage, setAlertMessage] = useState("");
     const [alertType, setAlertType] = useState("");
 
-    // বুকিং বাটন ক্লিক লজিক
+   
     const handleBookingClick = () => {
         const currentDate = new Date("2026-05-20");
         const sessionStartDate = new Date(tutor.session_start_date);
@@ -80,7 +80,6 @@ const TutorDetails = ({ initialTutorData }) => {
         setIsOpen(true);
     };
 
-    // সাবমিট লজিক
     const handleConfirmBooking = (e) => {
         e.preventDefault();
 
@@ -109,7 +108,7 @@ const TutorDetails = ({ initialTutorData }) => {
         <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6 lg:px-8 font-sans">
             <div className="max-w-5xl mx-auto">
 
-                {/* অ্যালার্ট নোটিফিকেশন */}
+              
                 {alertMessage && (
                     <div className={`mb-6 p-4 rounded-xl text-sm font-medium border shadow-sm flex items-center gap-2 transition-all ${alertType === "error"
                         ? "bg-red-50 text-red-700 border-red-200"
@@ -119,11 +118,11 @@ const TutorDetails = ({ initialTutorData }) => {
                     </div>
                 )}
 
-                {/* কাস্টম পিওর টেলউইন্ড কার্ড লেআউট */}
+              
                 <div className="bg-white rounded-2xl shadow-md border border-gray-100 overflow-hidden w-full">
                     <div className="flex flex-col md:flex-row w-full min-h-[450px]">
 
-                        {/* বাম পাশের ইমেজ সেকশন */}
+               
                         <div className="w-full md:w-5/12 relative min-h-[300px] md:min-h-[450px] bg-gray-100">
                             <Image
                                 src={tutor.photo}
@@ -138,7 +137,7 @@ const TutorDetails = ({ initialTutorData }) => {
                             </span>
                         </div>
 
-                        {/* ডান পাশের ইনফরমেশন সেকশন */}
+                     
                         <div className="w-full md:w-7/12 p-6 md:p-8 flex flex-col justify-between bg-white">
                             <div>
                                 <div className="flex justify-between items-center mb-4">
@@ -158,7 +157,7 @@ const TutorDetails = ({ initialTutorData }) => {
 
                                 <hr className="border-gray-100 mb-5" />
 
-                                {/* গ্রিড ডিটেইলস */}
+                          
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm text-gray-600 mb-6">
                                     <div className="flex items-start gap-2.5">
                                         <FaBriefcase className="text-teal-600 mt-0.5 flex-shrink-0" />
@@ -206,7 +205,7 @@ const TutorDetails = ({ initialTutorData }) => {
 
                             <hr className="border-gray-100 mb-5" />
 
-                            {/* ফি এবং বুক সেশন বাটন */}
+                        
                             <div className="flex items-center justify-between mt-auto pt-2">
                                 <div>
                                     <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Hourly Fee</p>
@@ -227,20 +226,20 @@ const TutorDetails = ({ initialTutorData }) => {
                     </div>
                 </div>
 
-                {/* কাস্টম পিওর টেলউইন্ড মোডাল */}
+             
                 {isOpen && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        {/* ব্যাকড্রপ ব্লার */}
+                   
                         <div
                             className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
                             onClick={() => setIsOpen(false)}
                         ></div>
 
-                        {/* মোডাল কন্টেন্ট বক্স */}
+                  
                         <div className="bg-white rounded-2xl max-w-md w-full shadow-2xl z-10 overflow-hidden border border-gray-100 transition-all transform scale-100">
                             <form onSubmit={handleConfirmBooking}>
 
-                                {/* মোডাল হেডার */}
+                      
                                 <div className="flex justify-between items-center text-xl font-bold text-slate-800 border-b border-gray-100 px-6 py-4">
                                     <h2>Confirm Your Booking</h2>
                                     <button
@@ -252,10 +251,10 @@ const TutorDetails = ({ initialTutorData }) => {
                                     </button>
                                 </div>
 
-                                {/* মোডাল বডি */}
+                            
                                 <div className="p-6 flex flex-col gap-4 max-h-[70vh] overflow-y-auto">
 
-                                    {/* টিউটর আইডি */}
+                        
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Tutor ID</label>
                                         <input
@@ -266,7 +265,7 @@ const TutorDetails = ({ initialTutorData }) => {
                                         />
                                     </div>
 
-                                    {/* টিউটর নাম */}
+                              
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Tutor Name</label>
                                         <input
@@ -277,7 +276,6 @@ const TutorDetails = ({ initialTutorData }) => {
                                         />
                                     </div>
 
-                                    {/* ইমেইল */}
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Your Email</label>
                                         <div className="relative">
@@ -293,7 +291,7 @@ const TutorDetails = ({ initialTutorData }) => {
                                         </div>
                                     </div>
 
-                                    {/* স্টুডেন্ট নাম */}
+                         
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Your Name <span className="text-red-500">*</span></label>
                                         <div className="relative">
@@ -311,7 +309,7 @@ const TutorDetails = ({ initialTutorData }) => {
                                         </div>
                                     </div>
 
-                                    {/* ফোন নাম্বার */}
+                               
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-500 mb-1">Phone Number <span className="text-red-500">*</span></label>
                                         <div className="relative">
@@ -329,14 +327,14 @@ const TutorDetails = ({ initialTutorData }) => {
                                         </div>
                                     </div>
 
-                                    {/* কনফার্মেশন ব্যাজ */}
+                               
                                     <div className="flex items-center gap-2 mt-1 bg-emerald-50 text-emerald-700 px-3 py-2 rounded-lg text-xs font-semibold border border-emerald-100 w-fit">
                                         <FaCheckCircle />
                                         <span>Booking Status: Auto-Confirmed</span>
                                     </div>
                                 </div>
 
-                                {/* মোডাল ফুটার */}
+                        
                                 <div className="border-t border-gray-100 px-6 py-4 flex justify-end gap-3 bg-gray-50/50">
                                     <button
                                         type="button"

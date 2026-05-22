@@ -5,19 +5,18 @@ import { Card, Button, Chip } from '@heroui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGraduationCap, FaMapMarkerAlt, FaClock, FaBookOpen } from 'react-icons/fa';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import { HashLoader } from 'react-spinners';
 
 export default function TutorCardsSection() {
-    // ১. আপনার data.json ফাইলের ডেটা রাখার জন্য স্টেট
     const [tutors, setTutors] = useState([]);
     const [visibleCount, setVisibleCount] = useState(6);
     const [loading, setLoading] = useState(true);
 
-    // ফিল্টার স্টেটসমূহ
     const [search, setSearch] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    // ২. JSON ফাইল থেকে ডেটা নিয়ে আসার জন্য useEffect
     useEffect(() => {
         fetch('http://localhost:8000/TutorDetails')
             .then((res) => res.json())
@@ -31,40 +30,30 @@ export default function TutorCardsSection() {
             });
     }, []);
 
-    // ৩. আপনার রিকোয়ারমেন্ট অনুযায়ী নিখুঁত useMemo ফিল্টার লজিক
     const filteredTutors = useMemo(() => {
         let result = tutors;
 
-        // নাম দিয়ে সার্চ ফিল্টার
         if (search.trim() !== '') {
             result = result.filter((tutor) =>
                 tutor.tutor_name && tutor.tutor_name.toLowerCase().includes(search.toLowerCase())
             );
         }
 
-        // ৪. ডেট রেঞ্জের ভেতরে (Inside the Range) ফিল্টার করার লজিক
         if (startDate || endDate) {
             result = result.filter((tutor) => {
-                const tutorStart = tutor.session_start_date; // টিউটরের সেশন শুরু
-                const tutorEnd = tutor.session_end_date;     // টিউটরের সেশন শেষ
+                const tutorStart = tutor.session_start_date;
+                const tutorEnd = tutor.session_end_date;
 
-                // যদি কোনো টিউটরের ডেটা মিসিং থাকে, তাকে বাদ দেওয়া হবে ফিল্টার করার সময়
                 if (!tutorStart || !tutorEnd) return false;
 
-                // কন্ডিশন ১: যদি স্টার্ট এবং এন্ড ডেট দুটাই সিলেক্ট করা থাকে
-                // টিউটরের পুরো সেশনটি ইউজারের সিলেক্ট করা রেঞ্জের ভেতরে থাকতে হবে
                 if (startDate && endDate) {
                     return tutorStart >= startDate && tutorEnd <= endDate;
                 }
 
-                // কন্ডিশন ২: যদি শুধু Available From (Start) সিলেক্ট করা থাকে
-                // টিউটরের সেশন অবশ্যই ইউজারের দেওয়া স্টার্ট ডেটের সমান বা পরে শুরু হতে হবে
                 if (startDate) {
                     return tutorStart >= startDate;
                 }
 
-                // কন্ডিশন ৩: যদি শুধু Available Till (End) সিলেক্ট করা থাকে
-                // টিউটরের সেশন অবশ্যই ইউজারের দেওয়া এন্ড ডেটের সমান বা আগে শেষ হতে হবে
                 if (endDate) {
                     return tutorEnd <= endDate;
                 }
@@ -76,12 +65,21 @@ export default function TutorCardsSection() {
         return result;
     }, [search, startDate, endDate, tutors]);
 
-    // রিসেট বাটন হ্যান্ডলার
     const handleReset = () => {
         setSearch('');
         setStartDate('');
         setEndDate('');
         setVisibleCount(6);
+        toast('Rest Successful', {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+        });
     };
 
     const showMoreTutors = () => {
@@ -90,39 +88,35 @@ export default function TutorCardsSection() {
 
     if (loading) {
         return (
-            <div className="w-full text-center my-20">
-                <p className="text-zinc-500 dark:text-zinc-400 animate-pulse font-medium">Loading Tutors...</p>
+            <div className="w-full h-screen flex justify-center items-center">
+                <HashLoader color="#0ee1dd" loading size={80} speedMultiplier={1} />
             </div>
         );
     }
-
+    const blankTransparentImage = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     return (
-        <div className="w-full max-w-7xl mx-auto my-10 px-4 relative overflow-visible bg-transparent">
+        <div className="w-full max-w-7xl mx-auto my-6 md:my-10 px-4 relative overflow-x-hidden md:overflow-visible bg-transparent">
 
-            {/* ব্যাকগ্রাউন্ড ইফেক্ট */}
-            <div className="absolute inset-0 pointer-events-none overflow-visible z-[-1]">
-                <div className="absolute left-1/3 top-1/4 w-[600px] h-[600px] rounded-full blur-[130px] bg-gradient-to-br from-slate-200/40 via-slate-100/10 to-transparent dark:from-teal-600/5 dark:via-blue-500/5" />
+            <div className="absolute inset-0 pointer-events-none overflow-hidden z-[-1]">
+                <div className="absolute left-1/3 top-1/4 w-[300px] md:w-[600px] h-[300px] md:h-[600px] rounded-full blur-[80px] md:blur-[130px] bg-gradient-to-br from-slate-200/40 via-slate-100/10 to-transparent dark:from-teal-600/5 dark:via-blue-500/5" />
             </div>
 
-            {/* সেকশন হেডার */}
-            <div className="text-center mb-6">
-                <p className="text-3xl md:text-5xl bg-gradient-to-t from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent  tracking-tight font-black">All Tutors</p>
-                <h2 className="text-2xl md:text-4xl font-extrabold text-zinc-800 dark:text-white tracking-tight">
+            <div className="text-center mb-6 space-y-2">
+                <p className="text-2xl md:text-5xl bg-gradient-to-t from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent tracking-tight font-black">All Tutors</p>
+                <h2 className="text-xl md:text-4xl font-extrabold text-zinc-800 dark:text-white tracking-tight">
                     Find Your Perfect <span className="text-[#237888] dark:text-teal-400">Expert Tutor</span>
                 </h2>
-                <p className="text-zinc-500 dark:text-zinc-400 mt-2 text-sm md:text-base max-w-xl mx-auto">
+                <p className="text-zinc-500 dark:text-zinc-400 mt-1 text-xs md:text-base max-w-xl mx-auto">
                     Learn from top university experts with tailored slots and affordable fees.
                 </p>
             </div>
 
-            {/* সার্চ ও ফিল্টার প্যানেল */}
-            <div className="w-full bg-white dark:bg-zinc-900/60 border border-slate-100 dark:border-zinc-800/80 p-6 sm:p-8 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.03)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)] backdrop-blur-md mb-3 transition-all duration-300">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-center">
+            <div className="w-full bg-white dark:bg-zinc-900/60 border border-slate-100 dark:border-zinc-800/80 p-4 md:p-8 rounded-2xl md:rounded-3xl shadow-sm backdrop-blur-md mb-6 transition-all duration-300">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 items-end">
 
-                    {/* সার্চ ইনপুট */}
-                    <div className="flex flex-col space-y-2 w-full text-left">
-                        <label className="text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5 h-4">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
+                    <div className="flex flex-col space-y-1 w-full text-left col-span-2 sm:col-span-1">
+                        <label className="text-[10px] md:text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
                             Search Tutor
                         </label>
                         <input
@@ -132,16 +126,15 @@ export default function TutorCardsSection() {
                                 setSearch(e.target.value);
                                 setVisibleCount(6);
                             }}
-                            placeholder="Search tutor by name..."
-                            className="w-full px-4 py-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-800 dark:text-white text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 focus:bg-white dark:focus:bg-zinc-950 shadow-inner transition-all duration-200"
+                            placeholder="Name..."
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-800 dark:text-white text-xs md:text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 shadow-inner transition-all duration-200"
                         />
                     </div>
 
-                    {/* স্টার্ট ডেট ইনপুট */}
-                    <div className="flex flex-col space-y-2 w-full text-left">
-                        <label className="text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5 h-4">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
-                            Available From
+                    <div className="flex flex-col space-y-1 w-full text-left">
+                        <label className="text-[10px] md:text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
+                            From
                         </label>
                         <input
                             type="date"
@@ -150,15 +143,14 @@ export default function TutorCardsSection() {
                                 setStartDate(e.target.value);
                                 setVisibleCount(6);
                             }}
-                            className="w-full px-4 py-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 focus:bg-white dark:focus:bg-zinc-950 shadow-inner transition-all duration-200 cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 text-xs md:text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 shadow-inner transition-all duration-200 [color-scheme:light] dark:[color-scheme:dark]"
                         />
                     </div>
 
-                    {/* এন্ড ডেট ইনপুট */}
-                    <div className="flex flex-col space-y-2 w-full text-left">
-                        <label className="text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1.5 h-4">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
-                            Available Till
+                    <div className="flex flex-col space-y-1 w-full text-left">
+                        <label className="text-[10px] md:text-xs font-bold text-[#237888] dark:text-teal-400 uppercase tracking-wider flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-[#237888] dark:bg-teal-400 inline-block"></span>
+                            Till
                         </label>
                         <input
                             type="date"
@@ -167,112 +159,108 @@ export default function TutorCardsSection() {
                                 setEndDate(e.target.value);
                                 setVisibleCount(6);
                             }}
-                            className="w-full px-4 py-3 rounded-2xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 focus:bg-white dark:focus:bg-zinc-950 shadow-inner transition-all duration-200 cursor-pointer [color-scheme:light] dark:[color-scheme:dark]"
+                            className="w-full px-3 py-2 rounded-xl border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 text-xs md:text-sm outline-none focus:border-[#237888] dark:focus:border-teal-500 shadow-inner transition-all duration-200 [color-scheme:light] dark:[color-scheme:dark]"
                         />
                     </div>
 
-                    {/* ফিল্টার রিসেট বাটন (১০০% সমান হাইট ফিক্সড) */}
-                    <div className='mt-3'>
-                        <Button onClick={handleReset} size='lg' className="w-full rounded-xl  ">Reset </Button>
+                    <div className="col-span-2 lg:col-span-1">
+                        <Button onClick={handleReset} size='md' className="w-full rounded-xl text-xs font-bold dark:bg-zinc-800 text-white dark:text-zinc-300 h-9">
+                            Reset
+                        </Button>
                     </div>
-
 
                 </div>
             </div>
 
-            {/* ডাটা না পাওয়া গেলে */}
             {filteredTutors.length === 0 && (
-                <div className="w-full text-center my-16">
-                    <p className="text-zinc-500 dark:text-zinc-400 font-medium">No tutors found matching the criteria.</p>
+                <div className="w-full text-center my-10 px-2">
+                    <p className="text-zinc-500 dark:text-zinc-400 font-medium text-sm md:text-xl p-10 md:p-20 border-2 rounded-xl border-dashed">No tutors found matching the criteria.</p>
                 </div>
             )}
 
-            {/* টিউটর গ্রিড */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-8">
                 <AnimatePresence mode="popLayout">
                     {filteredTutors.slice(0, visibleCount).map((tutor, index) => (
                         <motion.div
-                            key={tutor.id || index}
-                            initial={{ opacity: 0, y: 25 }}
+                            key={tutor._id || index}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{ duration: 0.4, delay: (index % 3) * 0.05 }}
-                            whileHover={{ y: -6 }}
-                            className="h-full"
+                            transition={{ duration: 0.3, delay: (index % 2) * 0.05 }}
+                            whileHover={{ y: -4 }}
+                            className="h-full w-full"
                         >
-                            <Card className="w-full border border-slate-100 dark:border-zinc-800 shadow-sm hover:shadow-xl hover:border-[#237888]/30 dark:hover:border-teal-500/30 transition-all duration-300 rounded-2xl bg-white dark:bg-zinc-900/90 backdrop-blur-md overflow-hidden group flex flex-col p-0">
+                            <Card className="w-full border border-slate-100 dark:border-zinc-800 shadow-sm hover:shadow-md hover:border-[#237888]/30 dark:hover:border-teal-500/30 transition-all duration-300 rounded-xl md:rounded-2xl bg-white dark:bg-zinc-900/90 backdrop-blur-md overflow-hidden group flex flex-col p-0 h-full">
 
-                                {/* ইমেজ বক্স */}
-                                <div className="relative w-full overflow-hidden bg-slate-50 dark:bg-zinc-800 shrink-0">
+                                <div className="relative w-full overflow-hidden bg-slate-50 dark:bg-zinc-800 aspect-square shrink-0">
                                     <Image
-                                        src={tutor.photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb"}
+                                        src={tutor.photo || blankTransparentImage}
                                         alt={tutor.tutor_name || "Tutor Photo"}
-                                        width={400}
-                                        height={400}
-                                        sizes="(max-w-7xl) 33vw"
-                                        priority={index < 3}
-                                        className="object-cover overflow-hidden rounded-t-3xl p-2 group-hover:scale-102 transition-transform duration-500"
+                                        fill
+                                        sizes="(max-w-7xl) 50vw, 33vw"
+                                        priority={index < 4}
+                                        className="object-cover rounded-t-xl md:rounded-t-2xl p-1 md:p-2 group-hover:scale-102 transition-transform duration-400"
+
+                                        unoptimized={true}
+                                        onError={(e) => {
+                                            e.target.src = blankTransparentImage;
+                                        }}
                                     />
-                                    <div className="absolute top-3 right-3 z-10">
-                                        <Chip size="sm" variant="flat" className="bg-black/60 backdrop-blur-md text-white text-xs border-none px-2 py-0.5 rounded-lg">
+                                    <div className="absolute top-1.5 right-1.5 z-10">
+                                        <Chip size="sm" variant="flat" className="bg-black/40 backdrop-blur-md text-white text-[8px] md:text-xs border-none px-1 py-0.5 rounded-md h-4 md:h-6 min-w-0">
                                             {tutor.teaching_mode || "Both"}
                                         </Chip>
                                     </div>
                                 </div>
 
-                                {/* কন্টেন্ট এরিয়া */}
-                                <div className="p-5 flex-1 flex flex-col justify-between w-full text-left">
+                                <div className="p-2 md:p-5 flex-1 flex flex-col justify-between w-full text-left gap-1 md:gap-1.5">
                                     <div>
-                                        <div className="flex justify-between items-center mb-2">
-                                            <span className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#237888] dark:text-teal-400">
-                                                <FaBookOpen className="text-[10px]" />
+                                        <div className="flex justify-between items-center gap-1">
+                                            <span className="flex items-center gap-0.5 md:gap-1 text-[8px] md:text-xs font-semibold uppercase tracking-wider text-[#237888] dark:text-teal-400 truncate max-w-[60%]">
+                                                <FaBookOpen className="text-[7px] md:text-[10px] shrink-0" />
                                                 {tutor.subject_category}
                                             </span>
-                                            <span className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">
-                                                {tutor.total_slots} Slots Available
+                                            <span className="text-[8px] md:text-xs text-zinc-400 dark:text-zinc-500 font-medium shrink-0">
+                                                {tutor.total_slots} Slots
                                             </span>
                                         </div>
 
-                                        <h3 className="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-[#237888] dark:group-hover:text-teal-400 transition-colors duration-200">
+                                        <h3 className="text-[11px] md:text-lg font-bold text-zinc-900 dark:text-white group-hover:text-[#237888] dark:group-hover:text-teal-400 transition-colors duration-200 line-clamp-1 mt-0.5">
                                             {tutor.tutor_name}
                                         </h3>
 
-                                        <p className="flex items-start gap-2 text-xs text-zinc-600 dark:text-zinc-400 mt-1.5 min-h-[16px]">
-                                            <FaGraduationCap className="text-zinc-400 shrink-0 mt-0.5 text-sm" />
+                                        <p className="flex items-center gap-1 text-[8px] md:text-xs text-zinc-600 dark:text-zinc-400 mt-0.5 min-h-[12px]">
+                                            <FaGraduationCap className="text-zinc-400 shrink-0 text-[9px] md:text-sm" />
                                             <span className="line-clamp-1 font-medium">{tutor.institution}</span>
                                         </p>
 
-                                        <hr className="my-3.5 border-slate-100 dark:border-zinc-800" />
+                                        <hr className="my-1 md:my-3.5 border-slate-100 dark:border-zinc-800" />
 
-                                        <div className="space-y-2">
-                                            <p className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                                                <FaClock className="text-zinc-400 text-sm shrink-0" />
-                                                <span className="line-clamp-1">{tutor.available_days} ({tutor.available_time_slot})</span>
+                                        <div className="space-y-0.5 md:space-y-2">
+                                            <p className="flex items-center gap-1 text-[8px] md:text-xs text-zinc-500 dark:text-zinc-400">
+                                                <FaClock className="text-zinc-400 text-[9px] md:text-sm shrink-0" />
+                                                <span className="line-clamp-1">{tutor.available_days}</span>
                                             </p>
 
-                                            <p className="text-xs text-zinc-500 dark:text-zinc-400 flex items-center gap-2">
-                                                <span className="font-semibold text-zinc-400">Timeline:</span> {tutor.session_start_date} to {tutor.session_end_date}
-                                            </p>
-
-                                            <p className="flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                                                <FaMapMarkerAlt className="text-zinc-400 text-sm shrink-0" />
+                                            <p className="flex items-center gap-1 text-[8px] md:text-xs text-zinc-500 dark:text-zinc-400">
+                                                <FaMapMarkerAlt className="text-zinc-400 text-[9px] md:text-sm shrink-0" />
                                                 <span className="line-clamp-1">{tutor.location}</span>
                                             </p>
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-center mt-5 pt-3 border-t border-slate-100 dark:border-zinc-800/60 w-full">
-                                        <div>
-                                            <p className="text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider">Hourly Fee</p>
-                                            <p className="text-base font-extrabold text-zinc-900 dark:text-white flex items-center">
-                                                <span className="text-sm font-bold text-emerald-500 mr-0.5">৳</span>
-                                                {tutor.hourly_fee} <span className="text-xs font-medium text-zinc-400 ml-0.5">/hr</span>
+                                    <div className="flex items-center justify-between mt-1.5 pt-1 md:mt-5 md:pt-3 border-t border-slate-100 dark:border-zinc-800/60 w-full gap-1">
+                                        <div className="min-w-0">
+                                            <p className="text-[7px] md:text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider truncate">Fee/hr</p>
+                                            <p className="text-11px md:text-base font-extrabold text-zinc-900 dark:text-white flex items-center truncate">
+                                                <span className="text-[9px] md:text-sm font-bold text-emerald-500 mr-0.5">৳</span>
+                                                {tutor.hourly_fee}
                                             </p>
                                         </div>
-                                        <Link href={`/${tutor._id}`}>
-                                         <Button size="lg" className="rounded-xl px-4 font-semibold text-xs text-white bg-[#237888] hover:bg-[#1a5c69] dark:bg-teal-600 dark:hover:bg-teal-500 shadow-sm transition-all">
-                                            Book Session
-                                        </Button>                                       
+                                        <Link href={`/${tutor._id}`} className="shrink-0">
+                                            <Button size="sm" className="rounded-lg md:rounded-xl px-2 md:px-4 font-semibold text-[9px] md:text-xs text-white bg-[#237888] hover:bg-[#1a5c69] dark:bg-teal-600 dark:hover:bg-teal-500 h-6.5 md:h-10 transition-all min-w-0">
+                                                Book
+                                            </Button>
                                         </Link>
                                     </div>
                                 </div>
@@ -282,10 +270,12 @@ export default function TutorCardsSection() {
                 </AnimatePresence>
             </div>
 
-            {/* View More বাটন */}
             {visibleCount < filteredTutors.length && (
-                <div className="flex justify-center mt-12">
-                    <Button onClick={showMoreTutors} size="lg" variant="bordered" className="rounded-xl px-8 py-3 text-sm font-bold text-black border-zinc-300 dark:border-zinc-700 hover:bg-[#238883] dark:hover:border-teal-400 hover:text-white dark:text-zinc-300 dark:hover:text-teal-400 bg-white dark:bg-zinc-900 shadow-sm transition-all duration-300">
+                <div className="flex justify-center mt-8 md:mt-12">
+                    <Button onClick={showMoreTutors} size="md" variant="bordered" className="md:hidden rounded-xl px-6 py-2 text-xs font-bold text-black border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-sm">
+                        View More Tutors
+                    </Button>
+                    <Button onClick={showMoreTutors} size="lg" variant="bordered" className="hidden md:flex rounded-xl px-8 py-3 text-sm font-bold text-black border-zinc-300 dark:border-zinc-700 hover:bg-[#238883] dark:hover:border-teal-400 hover:text-white dark:text-zinc-300 dark:hover:text-teal-400 bg-white dark:bg-zinc-900 shadow-sm transition-all duration-300">
                         View More Tutors
                     </Button>
                 </div>

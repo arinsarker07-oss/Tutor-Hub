@@ -84,29 +84,24 @@ export default function NormalBannerSlider() {
   };
 
   return (
-    <div>
-      <div className="w-full max-w-5xl mx-auto my-8 px-4 relative group overflow-visible bg-transparent py-6 rounded-3xl">
+    <div className="w-full overflow-x-hidden">
+      <div className="w-full max-w-5xl mx-auto my-4 md:my-8 px-4 relative group overflow-hidden md:overflow-visible bg-transparent py-2 md:py-6 rounded-3xl">
 
         <div className="absolute inset-0 pointer-events-none overflow-visible z-[-1]">
-
-
           <div
-            className="absolute -right-24 -top-24 w-[550px] h-[550px] bg-gradient-to-br from-teal-500/10 via-emerald-500/5 to-transparent blur-[100px] rounded-full"
+            className="absolute -right-24 -top-24 w-[300px] sm:w-[550px] h-[300px] sm:h-[550px] blur-[60px] sm:blur-[100px] bg-gradient-to-br from-teal-500/10 via-emerald-500/5 to-transparent rounded-full"
             style={{ transform: 'rotate(-20deg)' }}
           />
-
-
           <div
-            className="absolute -left-35 top-15 w-[500px] h-[500px] bg-gradient-to-tr from-teal-600/20 via-blue-500/10 to-transparent blur-[120px] rounded-full"
+            className="absolute -left-20 sm:-left-35 top-15 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] blur-[60px] sm:blur-[120px] bg-gradient-to-tr from-teal-600/20 via-blue-500/10 to-transparent rounded-full"
             style={{ transform: 'rotate(15deg)' }}
           />
-
         </div>
 
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          className="w-full h-[280px] sm:h-[350px] md:h-[450px] rounded-2xl relative overflow-hidden shadow-2xl bg-zinc-900 border border-[#0A2533]"
+          className="w-full h-[220px] sm:h-[350px] md:h-[450px] rounded-2xl relative overflow-hidden shadow-2xl bg-zinc-900 border border-[#0A2533]"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -117,7 +112,6 @@ export default function NormalBannerSlider() {
               exit="exit"
               className="absolute inset-0 w-full h-full"
             >
-
               <Image
                 src={banners[currentIndex].src}
                 alt={banners[currentIndex].title}
@@ -127,20 +121,25 @@ export default function NormalBannerSlider() {
                 unoptimized
               />
 
-
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6 md:p-12 z-10">
-                <h2 className="text-white text-xl md:text-3xl font-bold mb-2">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent flex flex-col justify-end p-4 md:p-12 z-10">
+                <h2 className="text-white text-base md:text-3xl font-bold mb-1 md:mb-2">
                   {banners[currentIndex].title}
                 </h2>
-                <p className="text-zinc-300 text-xs md:text-base max-w-md mb-4">
+                <p className="text-zinc-300 text-[11px] md:text-base max-w-xs md:max-w-md mb-2.5 md:mb-4 leading-relaxed line-clamp-2 md:line-clamp-none">
                   {banners[currentIndex].desc}
                 </p>
 
                 <div>
                   <Link href={banners[currentIndex].link}>
                     <Button
+                      size='sm'
+                      className="md:hidden rounded-lg px-4 py-1.5 text-[11px] font-bold transition-all hover:bg-[#23887e] bg-[#237888] text-white shadow-sm h-7"
+                    >
+                      {banners[currentIndex].button}
+                    </Button>
+                    <Button
                       size='lg'
-                      className="rounded-xl px-6 py-2.5 text-sm font-medium transition-all hover:bg-[#23887e] bg-[#237888] text-white hover:text-white shadow-sm"
+                      className="hidden md:flex rounded-xl px-6 py-2.5 text-sm font-medium transition-all hover:bg-[#23887e] bg-[#237888] text-white hover:text-white shadow-sm"
                     >
                       {banners[currentIndex].button}
                     </Button>
@@ -153,23 +152,23 @@ export default function NormalBannerSlider() {
 
         <button
           onClick={prevSlide}
-          className="absolute top-1/2 -translate-y-1/2 left-8 text-2xl rounded-full p-2 bg-black/40 text-white hover:bg-black/70 transition md:hidden group-hover:block z-20"
+          className="absolute top-1/2 -translate-y-1/2 left-6 text-xl rounded-full p-1.5 bg-black/40 text-white hover:bg-black/70 transition md:hidden group-hover:block z-20"
         >
           <FaAngleLeft />
         </button>
         <button
           onClick={nextSlide}
-          className="absolute top-1/2 -translate-y-1/2 right-8 text-2xl rounded-full p-2 bg-black/40 text-white hover:bg-black/70 transition md:hidden group-hover:block z-20"
+          className="absolute top-1/2 -translate-y-1/2 right-6 text-xl rounded-full p-1.5 bg-black/40 text-white hover:bg-black/70 transition md:hidden group-hover:block z-20"
         >
           <FaAngleRight />
         </button>
 
-        <div className="flex justify-center py-3 gap-2">
+        <div className="flex justify-center py-2 md:py-3 gap-1.5">
           {banners.map((banner, index) => (
             <button
               key={banner.id}
               onClick={() => setCurrentIndex(index)}
-              className={`h-2 rounded-full transition-all duration-300 ${currentIndex === index ? "bg-teal-500 w-6" : "bg-zinc-600 w-2"
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${currentIndex === index ? "bg-teal-500 w-4 md:w-6" : "bg-zinc-600 w-1.5 md:w-2"
                 }`}
             />
           ))}
@@ -180,9 +179,5 @@ export default function NormalBannerSlider() {
       <ExtraSection></ExtraSection>
       <ContactSection></ContactSection>
     </div>
-
-
-
-
   );
 }
