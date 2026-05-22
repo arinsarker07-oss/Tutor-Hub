@@ -20,8 +20,7 @@ export function Navbar() {
     }
 
     const pathname = usePathname()
-    console.log(pathname);
-    
+
     const navLinks = [
         { name: "Home", href: "/" },
         { name: "All Tutor", href: "/tutors" },
@@ -82,15 +81,15 @@ export function Navbar() {
                             {/* Buttons for Desktop */}
                             <div className="hidden md:flex items-center space-x-4">
                                 <Link href={"/profile"}>
-                                <div className={`p-0.5 rounded-full border-5 ${user?.emailVerified ? 'border-success' : 'border-[#237888]'}`}>
-                                    <Avatar>
-                                        <Avatar.Image alt={user?.name[0]} src={user?.image} referrerPolicy='no-referrer' />
-                                        <Avatar.Fallback>{user?.name[0]}</Avatar.Fallback>
-                                    </Avatar>
+                                    <div className={`p-0.5 rounded-full border-5 ${user?.emailVerified ? 'border-success' : 'border-[#237888]'}`}>
+                                        <Avatar>
+                                            <Avatar.Image alt={user?.name[0]} src={user?.image} referrerPolicy='no-referrer' />
+                                            <Avatar.Fallback>{user?.name[0]}</Avatar.Fallback>
+                                        </Avatar>
                                     </div>
                                 </Link>
-                                
-                                <button onClick={signouthandle}  className=" rounded-2xl  px-6 py-2.5 text-sm font-medium  transition-all bg-[#882350] text-white shadow-sm">
+
+                                <button onClick={signouthandle} className=" rounded-2xl  px-6 py-2.5 text-sm font-medium  transition-all bg-[#882350] text-white shadow-sm">
                                     Log Out
                                 </button>
                             </div>
