@@ -1,13 +1,13 @@
-import {  Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer";
 import { Navbar } from "@/components/Navber";
 import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "next-themes"; // next-themes import korlam
 
 const inter = Inter({
   subsets: ["latin"],
 });
-
 
 export const metadata = {
   title: "Create Next App",
@@ -19,12 +19,16 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${inter.className} h-full antialiased`}
+      suppressHydrationWarning // Theme change-er shomoy hydration warning bondho korbe
     >
       <body className="min-h-full w-full flex flex-col">
-        <Navbar></Navbar>
-        {children}
-        <Footer></Footer>
+        {/* Full layout-ke ThemeProvider diye wrap korlam */}
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <Navbar />
+          {children}
+          <Footer />
           <ToastContainer />
+        </ThemeProvider>
       </body>
     </html>
   );
