@@ -263,7 +263,7 @@ export default function TutorCards() {
             {/* all tutor  */}
             <Link href={"/tutors"}>
                 <div className="flex justify-center mt-8 md:mt-12">
-                    <Button onClick={showMoreTutors} size="md" variant="bordered" className="rounded-xl px-6 py-2 text-xs font-bold border-zinc-300 dark:border-zinc-700 bg-[#5dc5f1] text-black dark:bg-zinc-900 shadow-sm transition-all duration-300">
+                    <Button onClick={showMoreTutors} size="md" variant="bordered" className="rounded-xl px-6 py-2 text-xs font-bold border-zinc-300  dark:bg-[#5dc5f1] bg-[#5dc5f1] text-black  shadow-sm transition-all duration-300">
                         ALL Tutors
                     </Button>
                 </div>

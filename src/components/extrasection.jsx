@@ -81,14 +81,6 @@ export default function ExtraSection() {
 
       <section className="w-full max-w-7xl mx-auto px-4 my-10 md:my-20 relative overflow-visible">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2 }}
-          className="absolute right-0 top-10 w-40 h-40 md:w-80 md:h-80 rounded-full bg-teal-500/5 blur-[60px] md:blur-[100px] pointer-events-none" 
-        />
-
-        <motion.div 
           initial={{ opacity: 0, y: -10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

@@ -24,7 +24,7 @@ export default function UserSignUpSection() {
 
   const handleSignUpClick = async (e) => {
     e.preventDefault();
-    
+
     const { name, email, photo, password } = formData;
     const hasUppercase = /[A-Z]/.test(password);
     const hasLowercase = /[a-z]/.test(password);
@@ -40,10 +40,10 @@ export default function UserSignUpSection() {
     }
 
     const { data, error } = await authClient.signUp.email({
-        email: email,
-        password: password,
-        name: name,
-        image: photo
+      email: email,
+      password: password,
+      name: name,
+      image: photo
     });
 
     if (data) {
@@ -67,8 +67,8 @@ export default function UserSignUpSection() {
   const GoogleSignUp = async () => {
     try {
       await authClient.signIn.social({
-          provider: "google",
-          callbackURL: "/"
+        provider: "google",
+        callbackURL: "/"
       });
     } catch (error) {
       toast.error("Google Sign-Up Failed!", {
@@ -104,34 +104,11 @@ export default function UserSignUpSection() {
   return (
     <section className="w-full max-w-md mx-auto px-4 min-h-fit md:min-h-[calc(100vh-140px)] flex items-center justify-center relative py-6 md:py-10">
       <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1 }}
-        className="absolute left-0 top-0 w-72 h-72 rounded-full bg-[#237888]/5 blur-[100px] pointer-events-none"
-      />
-
-      <motion.div
         variants={formContainerVariants}
         initial="hidden"
         animate="visible"
         className="w-full bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md border border-slate-100 dark:border-zinc-800 rounded-2xl p-4 md:p-6 shadow-xl dark:shadow-none space-y-3.5 md:space-y-4 relative z-10"
       >
-        <motion.div
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-4 md:mb-6"
-        >
-          <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-[#237888] dark:text-teal-400 bg-[#237888]/10 dark:bg-teal-500/10 px-2.5 py-1 rounded-full">
-            Get Started
-          </span>
-          <h2 className="text-xl md:text-3xl font-extrabold bg-gradient-to-l from-[#0B253A] to-[#1D9299] bg-clip-text text-transparent dark:text-white tracking-tight mt-2.5">
-            Create Your Account
-          </h2>
-          <p className="text-zinc-500 dark:text-zinc-400 mt-1 text-[11px] md:text-xs">
-            Join TutorHub today to explore certified educators or manage your teaching schedule.
-          </p>
-        </motion.div>
 
         <form onSubmit={handleSignUpClick} className="space-y-3 md:space-y-4">
           <motion.div variants={inputVariants} className="flex flex-col space-y-1">

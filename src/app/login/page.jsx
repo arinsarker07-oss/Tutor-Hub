@@ -86,11 +86,6 @@ export default function UserLoginSection() {
 
     return (
         <section className="w-full max-w-md mx-auto px-4 min-h-[calc(100vh-120px)] flex items-center justify-center relative py-10">
-            <div className="absolute inset-0 z-0 opacity-40 dark:opacity-20 pointer-events-none">
-                <div className="absolute top-[-5%] right-[-5%] w-[45%] h-[45%] rounded-full bg-gradient-to-br from-[#237888]/20 to-transparent blur-[100px]" />
-                <div className="absolute bottom-[-5%] left-[-5%] w-[45%] h-[45%] rounded-full bg-gradient-to-tr from-teal-100/30 to-transparent blur-[100px]" />
-            </div>
-
             <motion.div
                 variants={containerVariants}
                 initial="hidden"

@@ -86,18 +86,6 @@ export default function NormalBannerSlider() {
   return (
     <div className="w-full overflow-x-hidden">
       <div className="w-full max-w-5xl mx-auto my-4 md:my-8 px-4 relative group overflow-hidden md:overflow-visible bg-transparent py-2 md:py-6 rounded-3xl">
-
-        <div className="absolute inset-0 pointer-events-none overflow-visible z-[-1]">
-          <div
-            className="absolute -right-24 -top-24 w-[300px] sm:w-[550px] h-[300px] sm:h-[550px] blur-[60px] sm:blur-[100px] bg-gradient-to-br from-teal-500/10 via-emerald-500/5 to-transparent rounded-full"
-            style={{ transform: 'rotate(-20deg)' }}
-          />
-          <div
-            className="absolute -left-20 sm:-left-35 top-15 w-[250px] sm:w-[500px] h-[250px] sm:h-[500px] blur-[60px] sm:blur-[120px] bg-gradient-to-tr from-teal-600/20 via-blue-500/10 to-transparent rounded-full"
-            style={{ transform: 'rotate(15deg)' }}
-          />
-        </div>
-
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
